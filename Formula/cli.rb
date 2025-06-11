@@ -1,4 +1,4 @@
-class Vault < Formula
+class Cli < Formula
   desc "rngo CLI"
   homepage "https://docs.rngo.dev"
   version "0.2.0"

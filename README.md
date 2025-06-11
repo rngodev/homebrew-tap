@@ -1,18 +1,13 @@
-# Rngodev Tap
+# rngo Hombrew Taps
 
-## How do I install these formulae?
+For installing the rngo cli via [Homebrew](https://brew.sh) on macOS and Linux.
 
-`brew install rngodev/tap/<formula>`
+For more information about taps, see: https://docs.brew.sh/Taps
 
-Or `brew tap rngodev/tap` and then `brew install <formula>`.
+## Install the rngo CLI
 
-Or, in a [`brew bundle`](https://github.com/Homebrew/homebrew-bundle) `Brewfile`:
+Run:
 
-```ruby
-tap "rngodev/tap"
-brew "<formula>"
+```bash
+brew install rngodev/tap/cli
 ```
-
-## Documentation
-
-`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
