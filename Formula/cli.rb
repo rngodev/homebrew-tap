@@ -1,21 +1,21 @@
 class Cli < Formula
   desc 'The CLI for the rngo data simulation API'
   homepage 'https://rngo.dev/docs/cli'
-  version '0.12.0'
+  version '0.13.0'
 
   if OS.mac? && Hardware::CPU.intel?
-    url 'https://github.com/rngodev/cli/releases/download/0.12.0/rngo-0.12.0-x86_64-apple-darwin.zip'
-    sha256 'e816e81057c485c6d3cea5d95bbd1a2f6f0d7f9d6db303c1111f07fba194e8f3'
+    url 'https://github.com/rngodev/cli/releases/download/0.13.0/rngo-0.13.0-x86_64-apple-darwin.zip'
+    sha256 '2531f52294035d374c28159ca737b43140e183f20428523f138edbdd87dd7b23'
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url 'https://github.com/rngodev/cli/releases/download/0.12.0/rngo-0.12.0-aarch64-apple-darwin.zip'
-    sha256 '0996465423de5691f92196ac0fd5dfc530efb33c4b55a4b7241019ff11723eb2'
+    url 'https://github.com/rngodev/cli/releases/download/0.13.0/rngo-0.13.0-aarch64-apple-darwin.zip'
+    sha256 'dee057f5120fce47a08439d6aa09741a8d9ba48f12c1843d553d0c5d69b375cd'
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url 'https://github.com/rngodev/cli/releases/download/0.12.0/rngo-0.12.0-x86_64-unknown-linux-musl.zip'
-    sha256 '37f3abe5e2f52d6cc12e73f38786458e756eb5cee66842c369957dc1880958c1'
+    url 'https://github.com/rngodev/cli/releases/download/0.13.0/rngo-0.13.0-x86_64-unknown-linux-musl.zip'
+    sha256 '57438120c2b95e747a671461235018a2c35cd762bcc5ec0dc14b68c56385a393'
   end
 
   def install
