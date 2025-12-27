@@ -12,30 +12,35 @@ VERSION=$(echo "$RELEASE_DATA" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1
 echo "Latest version: $VERSION"
 
 # Extract SHA256 digests from GitHub API
-ASSETS=(
-  "rngo-${VERSION}-x86_64-apple-darwin.zip"
-  "rngo-${VERSION}-aarch64-apple-darwin.zip"
-  "rngo-${VERSION}-x86_64-unknown-linux-musl.zip"
-)
+echo "Extracting SHA256 for x86_64-apple-darwin..."
+DARWIN_INTEL_ASSET="rngo-${VERSION}-x86_64-apple-darwin.zip"
+DARWIN_INTEL_DIGEST=$(echo "$RELEASE_DATA" | jq -r ".assets[] | select(.name == \"$DARWIN_INTEL_ASSET\") | .digest")
+if [ -z "$DARWIN_INTEL_DIGEST" ] || [ "$DARWIN_INTEL_DIGEST" == "null" ]; then
+  echo "Error: No digest found for $DARWIN_INTEL_ASSET in GitHub API response"
+  exit 1
+fi
+DARWIN_INTEL_SHA=$(echo "$DARWIN_INTEL_DIGEST" | cut -d':' -f2)
+echo "  SHA256: $DARWIN_INTEL_SHA"
 
-declare -A SHAS
+echo "Extracting SHA256 for aarch64-apple-darwin..."
+DARWIN_ARM_ASSET="rngo-${VERSION}-aarch64-apple-darwin.zip"
+DARWIN_ARM_DIGEST=$(echo "$RELEASE_DATA" | jq -r ".assets[] | select(.name == \"$DARWIN_ARM_ASSET\") | .digest")
+if [ -z "$DARWIN_ARM_DIGEST" ] || [ "$DARWIN_ARM_DIGEST" == "null" ]; then
+  echo "Error: No digest found for $DARWIN_ARM_ASSET in GitHub API response"
+  exit 1
+fi
+DARWIN_ARM_SHA=$(echo "$DARWIN_ARM_DIGEST" | cut -d':' -f2)
+echo "  SHA256: $DARWIN_ARM_SHA"
 
-for asset in "${ASSETS[@]}"; do
-  echo "Extracting SHA256 for $asset..."
-  # GitHub API provides digest in format "sha256:hash"
-  digest=$(echo "$RELEASE_DATA" | jq -r ".assets[] | select(.name == \"$asset\") | .digest")
-
-  if [ -z "$digest" ] || [ "$digest" == "null" ]; then
-    echo "Error: No digest found for $asset in GitHub API response"
-    exit 1
-  fi
-
-  # Extract hash after "sha256:" prefix
-  sha=$(echo "$digest" | cut -d':' -f2)
-
-  SHAS[$asset]=$sha
-  echo "  SHA256: $sha"
-done
+echo "Extracting SHA256 for x86_64-unknown-linux-musl..."
+LINUX_INTEL_ASSET="rngo-${VERSION}-x86_64-unknown-linux-musl.zip"
+LINUX_INTEL_DIGEST=$(echo "$RELEASE_DATA" | jq -r ".assets[] | select(.name == \"$LINUX_INTEL_ASSET\") | .digest")
+if [ -z "$LINUX_INTEL_DIGEST" ] || [ "$LINUX_INTEL_DIGEST" == "null" ]; then
+  echo "Error: No digest found for $LINUX_INTEL_ASSET in GitHub API response"
+  exit 1
+fi
+LINUX_INTEL_SHA=$(echo "$LINUX_INTEL_DIGEST" | cut -d':' -f2)
+echo "  SHA256: $LINUX_INTEL_SHA"
 
 # Update the formula file
 echo "Updating $FORMULA_FILE..."
@@ -48,17 +53,17 @@ class Cli < Formula
 
   if OS.mac? && Hardware::CPU.intel?
     url 'https://github.com/${REPO}/releases/download/${VERSION}/rngo-${VERSION}-x86_64-apple-darwin.zip'
-    sha256 '${SHAS[rngo-${VERSION}-x86_64-apple-darwin.zip]}'
+    sha256 '${DARWIN_INTEL_SHA}'
   end
 
   if OS.mac? && Hardware::CPU.arm?
     url 'https://github.com/${REPO}/releases/download/${VERSION}/rngo-${VERSION}-aarch64-apple-darwin.zip'
-    sha256 '${SHAS[rngo-${VERSION}-aarch64-apple-darwin.zip]}'
+    sha256 '${DARWIN_ARM_SHA}'
   end
 
   if OS.linux? && Hardware::CPU.intel?
     url 'https://github.com/${REPO}/releases/download/${VERSION}/rngo-${VERSION}-x86_64-unknown-linux-musl.zip'
-    sha256 '${SHAS[rngo-${VERSION}-x86_64-unknown-linux-musl.zip]}'
+    sha256 '${LINUX_INTEL_SHA}'
   end
 
   def install
