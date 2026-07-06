@@ -2,7 +2,7 @@
 
 set -e
 
-REPO="rngodev/cli"
+REPO="rngodev/rngo-rs"
 FORMULA_FILE="Formula/cli.rb"
 
 echo "Fetching latest release from GitHub API..."
